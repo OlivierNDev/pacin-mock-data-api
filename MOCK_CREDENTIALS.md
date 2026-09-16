@@ -123,7 +123,17 @@ Authorization: Bearer <client_id>               # OAuth / Mono / Pngme style
 | Utility | `GET /utility/{subject_id}` | utility API key |
 | Telecom | `GET /telecom/{subject_id}` | telecom API key |
 
-**Test subjects:** `PACIN_TEST_001` (good profile) · `PACIN_TEST_002` (risky)
+**Test subjects:**
+
+| Name | subject_id | 16-digit National ID | Profile |
+|---|---|---|---|
+| Alice Uwimana | `PACIN_TEST_001` | `1199850101110001` | good_credit (stable MoMo + bank + utility + insurance + telecom) |
+| Jean-Pierre Habimana | `PACIN_TEST_002` | `1199760202220002` | risky_thin_file (irregular flows, thin data) |
+
+**NID Lookup endpoints:**
+- `GET /subjects` — lists all subjects with `national_id` field
+- `GET /subjects?nid=1199850101110001` — filter by NID
+- `GET /subjects/by-nid/1199850101110001` — direct NID lookup → subject_id + profile
 
 ---
 

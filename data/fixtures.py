@@ -17,10 +17,22 @@ for y in range(2024, 2027):
             MONTHS.append(key)
 
 SUBJECT_PROFILES = {
-    "PACIN_TEST_001": {"name": "Alice Uwimana", "age": 28, "district": "Gasabo", "city": "Kigali",
-        "phone_hash": hashlib.sha256(b"+250788100001").hexdigest()},
-    "PACIN_TEST_002": {"name": "Jean-Pierre Habimana", "age": 34, "district": "Musanze", "city": "Musanze",
-        "phone_hash": hashlib.sha256(b"+250788200002").hexdigest()},
+    "PACIN_TEST_001": {
+        "name": "Alice Uwimana",
+        "age": 28,
+        "district": "Gasabo",
+        "city": "Kigali",
+        "national_id": "1199850101110001",
+        "phone_hash": hashlib.sha256(b"+250788100001").hexdigest(),
+    },
+    "PACIN_TEST_002": {
+        "name": "Jean-Pierre Habimana",
+        "age": 34,
+        "district": "Musanze",
+        "city": "Musanze",
+        "national_id": "1199760202220002",
+        "phone_hash": hashlib.sha256(b"+250788200002").hexdigest(),
+    },
 }
 
 def _days_in_month(ym):

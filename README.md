@@ -4,12 +4,21 @@ A FastAPI service that simulates **5 Rwandan financial data providers** for test
 
 ## Test Subjects
 
-| Subject ID | Name | Profile | Location |
-|------------|------|---------|----------|
-| `PACIN_TEST_001` | Alice Uwimana | Good credit | Kigali, Gasabo |
-| `PACIN_TEST_002` | Jean-Pierre Habimana | Risky/thin-file | Musanze |
+| Name | subject_id | 16-digit NID | Profile | Location |
+|------|-----------|--------------|---------|----------|
+| Alice Uwimana | `PACIN_TEST_001` | **`1199850101110001`** | good_credit | Kigali, Gasabo |
+| Jean-Pierre Habimana | `PACIN_TEST_002` | **`1199760202220002`** | risky_thin_file | Musanze |
 
 24 months of data (2024-09 to 2026-08) per subject across all 5 sources.
+
+### NID Lookup
+```bash
+# Lookup by NID (direct)
+curl https://pacin-mock-data-api.onrender.com/subjects/by-nid/1199850101110001
+
+# Filter subjects list by NID
+curl "https://pacin-mock-data-api.onrender.com/subjects?nid=1199760202220002"
+```
 
 ## API Keys (Test)
 
@@ -29,7 +38,9 @@ After deploying to Render: `https://pacin-mock-data-api.onrender.com`
 
 ```
 GET  /health                          # No auth
-GET  /subjects                        # No auth
+GET  /subjects                        # No auth — includes national_id field
+GET  /subjects?nid={16-digit-nid}     # No auth — filter by NID
+GET  /subjects/by-nid/{nid}           # No auth — lookup by 16-digit NID
 GET  /momo/{subject_id}               # X-API-Key: momo key
 GET  /momo/{subject_id}/summary
 GET  /bank/{subject_id}               # X-API-Key: bank key

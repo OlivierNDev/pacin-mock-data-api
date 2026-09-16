@@ -59,3 +59,4 @@ class SubjectInfo(BaseModel):
     district: str
     city: str
     profile_type: str
+    national_id: Optional[str] = None

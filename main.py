@@ -57,9 +57,45 @@ def _envelope(source_type, subject_id, data, record_count):
 def health(): return HealthResponse(subjects_loaded=len(VALID_SUBJECTS), sources=list(API_KEYS.keys()))
 
 @app.get("/subjects", tags=["Discovery"])
-def list_subjects():
-    return [SubjectInfo(subject_id=sid, name=p["name"], age=p["age"], district=p["district"], city=p["city"],
-        profile_type="good_credit" if sid=="PACIN_TEST_001" else "risky_thin_file") for sid, p in SUBJECT_PROFILES.items()]
+def list_subjects(nid: str = None):
+    """List all test subjects. Pass ?nid= to filter by 16-digit National ID."""
+    results = []
+    for sid, p in SUBJECT_PROFILES.items():
+        subject = SubjectInfo(
+            subject_id=sid,
+            name=p["name"],
+            age=p["age"],
+            district=p["district"],
+            city=p["city"],
+            national_id=p.get("national_id"),
+            profile_type="good_credit" if sid == "PACIN_TEST_001" else "risky_thin_file",
+        )
+        results.append(subject)
+    if nid:
+        results = [s for s in results if s.national_id == str(nid).strip()]
+    return results
+
+
+@app.get("/subjects/by-nid/{nid}", tags=["Discovery"])
+def get_subject_by_nid(nid: str):
+    """Lookup a test subject by their 16-digit Rwanda National ID."""
+    clean_nid = str(nid).strip()
+    for sid, p in SUBJECT_PROFILES.items():
+        if p.get("national_id") == clean_nid:
+            return SubjectInfo(
+                subject_id=sid,
+                name=p["name"],
+                age=p["age"],
+                district=p["district"],
+                city=p["city"],
+                national_id=p.get("national_id"),
+                profile_type="good_credit" if sid == "PACIN_TEST_001" else "risky_thin_file",
+            )
+    raise HTTPException(
+        status_code=404,
+        detail=f"No test subject found for NID '{clean_nid}'. "
+               f"Valid NIDs: {[p.get('national_id') for p in SUBJECT_PROFILES.values()]}",
+    )
 
 @app.get("/momo/{subject_id}", tags=["MoMo"])
 def get_momo(subject_id: str, _=Depends(require_source("momo"))):
